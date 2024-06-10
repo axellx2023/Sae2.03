@@ -1,0 +1,17 @@
+docker pull wordpress
+
+docker pull mariadb
+
+docker pull phpmyadmin
+
+docker network create sae23_helix
+
+mkdir C:\path\to\Sae2.03\badowordpress
+
+mkdir C:\path\to\Sae2.03\htmlwordpress
+
+docker run --detach --name axel-mariadb --env MARIADB_USER=axel --env MARIADB_PASSWORD=axel --env MARIADB_DATABASE=mariadb --env MARIADB_ROOT_PASSWORD=axel -p 3306:3306 --network sae23_helix --volume C:\path\to\Sae2.03\badowordpress:/var/lib/mysql mariadb:latest
+
+docker run --detach --name my_phpmyadmin --network sae23_helix --env PMA_HOST=axel-mariadb -p 9000:80 phpmyadmin/phpmyadmin:latest
+
+docker run --detach --name axel_wordpress --env WORDPRESS_DB_HOST=axel-mariadb --env WORDPRESS_DB_USER=axel --env WORDPRESS_DB_PASSWORD=axel --env WORDPRESS_DB_NAME=mariadb -p 80:80 --network sae23_helix --volume C:\path\to\Sae2.03\htmlwordpress:/var/www/html wordpress:latest
